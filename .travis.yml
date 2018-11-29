@@ -19,3 +19,4 @@ mono: none
 dotnet: 2.1.403
 script:
  - dotnet build ./src/Ironclad.sln
+ - dotnet test ./src/tests/Ironclad.Tests/Ironclad.Tests.csproj
