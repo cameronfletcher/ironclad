@@ -24,7 +24,7 @@ namespace Ironclad.Tests.Sdk
             var authority = config.GetValue<string>("authority");
             var useDockerImage = config.GetValue<bool>("use_docker_image");
 
-            if (Environment.GetEnvironmentVariable("CI") != null)
+            if (Environment.GetEnvironmentVariable("USELOCALPOSTGRES") != null)
             {
                 if (Environment.GetEnvironmentVariable("POSTGRES_CONNECTIONSTRING") == null)
                 {
