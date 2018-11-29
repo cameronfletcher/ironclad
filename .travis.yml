@@ -18,4 +18,4 @@ language: csharp
 mono: none
 dotnet: 2.1.403
 script:
- - dotnet build ./src/Irconclad.sln
+ - dotnet build ./src/Ironclad.sln
