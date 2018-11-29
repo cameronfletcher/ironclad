@@ -20,7 +20,7 @@ dotnet: 2.1.403
 services:
  - postgres
 env:
- - POSTGRES_CONNECTIONSTRING=Host=localhost;Database=ironclad;Username=postgres;Password=;
+ - POSTGRES_CONNECTIONSTRING="Host=localhost;Database=ironclad;Username=postgres;Password=;"
  - GOOGLE_CLIENT_ID="foo"
  - GOOGLE_SECRET="bar"
 script:
