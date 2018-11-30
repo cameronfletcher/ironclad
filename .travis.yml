@@ -20,9 +20,7 @@ dotnet: 2.1.403
 services:
  - postgres
 env:
- - POSTGRES_CONNECTIONSTRING="Host=localhost;Database=ironclad;Username=postgres;Password=;"
- - GOOGLE_CLIENT_ID="foo"
- - GOOGLE_SECRET="bar"
+ - POSTGRES_CONNECTIONSTRING="Host=localhost;Database=ironclad;Username=postgres;Password=;" GOOGLE_CLIENT_ID="foo" GOOGLE_SECRET="bar"
 script:
  - dotnet build ./src/Ironclad.sln
  - dotnet test ./src/tests/Ironclad.Tests/Ironclad.Tests.csproj
