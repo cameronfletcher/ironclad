@@ -4,6 +4,7 @@
 namespace Ironclad
 {
     using System;
+    using AspNetCoreRateLimit;
     using IdentityModel.Client;
     using IdentityServer4.AccessTokenValidation;
     using IdentityServer4.Postgresql.Extensions;
@@ -162,6 +163,8 @@ namespace Ironclad
                 var options = new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto };
                 app.UseForwardedHeaders(options);
             }
+
+            app.UseClientRateLimiting();
 
             app.UseStaticFiles();
             app.UseIdentityServer();
