@@ -53,6 +53,5 @@ namespace Ironclad.Client
         /// </summary>
         /// <value>Space-separated string that specifies the acr values.</value>
         public string AcrValues { get; set; }
-
     }
 }

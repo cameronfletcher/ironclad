@@ -212,7 +212,7 @@ namespace Ironclad.WebApi
                 client.AccessTokenType = model.AccessTokenType == null ? client.AccessTokenType : accessTokenType;
                 client.RefreshTokenUsage = model.RefreshTokenUsage == null ? client.RefreshTokenUsage : refreshTokenUsage;
                 client.RefreshTokenExpiration = model.RefreshTokenExpiration == null ? client.RefreshTokenExpiration : refreshTokenExpiration;
-                
+
                 // NOTE (Cameron): If the secret is updated we want to add the new secret...
                 if (!string.IsNullOrEmpty(model.Secret))
                 {
