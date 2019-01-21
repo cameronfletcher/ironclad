@@ -15,10 +15,7 @@ namespace Ironclad.Console.Commands
 
     internal class LoginCommand : ICommand
     {
-        public const string ProductionAuthority = "https://auth.lykkecloud.com";
-        private const string TestAuthority = "https://auth-test.lykkecloud.com";
-
-        private Api api;
+        private Api apiResponse;
 
         private LoginCommand()
         {
@@ -35,30 +32,21 @@ namespace Ironclad.Console.Commands
             var argumentAuthority = app.Argument("authority", "The URL for the authorization server to log in to");
 
             // options
-            var optionTest = app.Option("-t|--test", "Uses the Lykke TEST authorization server", CommandOptionType.NoValue);
             var optionReset = app.Option("-r|--reset", "Resets the authorization context", CommandOptionType.NoValue);
             app.HelpOption();
 
             // action (for this command)
             app.OnExecute(
-                () =>
+                async () =>
                 {
-                    if (optionReset.HasValue() && string.IsNullOrEmpty(argumentAuthority.Value) && !optionTest.HasValue())
+                    if (optionReset.HasValue() && string.IsNullOrEmpty(argumentAuthority.Value))
                     {
                         // only --reset was specified
                         options.Command = new Reset();
                         return;
                     }
 
-                    var authority = argumentAuthority.Value;
-                    if (string.IsNullOrEmpty(authority))
-                    {
-                        authority = optionTest.HasValue() ? TestAuthority : ProductionAuthority;
-                    }
-                    else if (optionTest.HasValue())
-                    {
-                        ////console.WriteLine("Ignoring test option as authority was specified.");
-                    }
+                    var authority = argumentAuthority.Value ?? "http://localhost:5005";
 
                     // validate
                     if (!Uri.TryCreate(authority, UriKind.Absolute, out var authorityUri))
@@ -67,15 +55,33 @@ namespace Ironclad.Console.Commands
                         return;
                     }
 
-                    var api = default(Api);
+                    var discoveryResponse = default(DiscoveryResponse);
+                    using (var discoveryClient = new DiscoveryClient(authority) { Policy = new DiscoveryPolicy { ValidateIssuerName = false } })
+                    {
+                        discoveryResponse = await discoveryClient.GetAsync().ConfigureAwait(false);
+                        if (discoveryResponse.IsError)
+                        {
+                            console.Error.WriteLine($"Discovery error: {discoveryResponse.Error}.");
+                            return;
+                        }
+                    }
+
+                    var apiUri = discoveryResponse.TryGetString("api_uri") ?? authority;
+
+                    var apiResponse = default(Api);
                     using (var client = new HttpClient())
                     {
                         try
                         {
-                            using (var response = client.GetAsync(new Uri(authority + "/api")).GetAwaiter().GetResult())
+                            using (var response = client.GetAsync(new Uri(apiUri)).GetAwaiter().GetResult())
                             {
-                                api = JsonConvert.DeserializeObject<Api>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult());
+                                apiResponse = JsonConvert.DeserializeObject<Api>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult());
                             }
+                        }
+                        catch (JsonReaderException)
+                        {
+                            console.Error.WriteLine($"Unable to connect to API at: {apiUri}.");
+                            return;
                         }
                         catch (HttpRequestException)
                         {
@@ -84,19 +90,19 @@ namespace Ironclad.Console.Commands
                         }
                     }
 
-                    if (api == null)
+                    if (apiResponse == null)
                     {
                         console.Error.WriteLine($"Invalid response from: {authority}.");
                         return;
                     }
 
-                    options.Command = new LoginCommand { Authority = authority, api = api };
+                    options.Command = new LoginCommand { Authority = authority, apiResponse = apiResponse };
                 });
         }
 
         public async Task ExecuteAsync(CommandContext context)
         {
-            context.Console.WriteLine($"Logging in to {this.Authority} ({this.api.Title} v{this.api.Version} running on {this.api.OS})...");
+            context.Console.WriteLine($"Logging in to {this.Authority} ({this.apiResponse.Title} v{this.apiResponse.Version} running on {this.apiResponse.OS})...");
 
             var data = context.Repository.GetCommandData();
             if (data != null && data.Authority == this.Authority)

@@ -1,7 +1,8 @@
 {
   "profiles": {
     "Ironclad.Console": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "clients show"
     }
   }
 }

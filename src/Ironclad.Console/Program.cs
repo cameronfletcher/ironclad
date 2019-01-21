@@ -88,24 +88,12 @@ namespace Ironclad.Console
                 return 0;
             }
 
-            var data = repository.GetCommandData() ??
-                new CommandData
-                {
-                    Authority = LoginCommand.ProductionAuthority,
-                };
+            var data = repository.GetCommandData() ?? new CommandData();
 
             var authority = data.Authority;
             if (options.Command is LoginCommand loginCommand)
             {
                 authority = loginCommand.Authority;
-            }
-            else
-            {
-                this.console.Write("Executing command against ");
-                this.console.ForegroundColor = ConsoleColor.White;
-                this.console.Write(authority);
-                this.console.ResetColor();
-                this.console.WriteLine("...");
             }
 
             var discoveryResponse = default(DiscoveryResponse);
@@ -119,14 +107,22 @@ namespace Ironclad.Console
                 }
             }
 
+            var apiUri = discoveryResponse.TryGetString("api_uri") ?? authority + "/api";
+
+            this.console.Write("Executing command against ");
+            this.console.ForegroundColor = ConsoleColor.White;
+            this.console.Write(options.Command is LoginCommand ? authority : apiUri);
+            this.console.ResetColor();
+            this.console.WriteLine("...");
+
             using (var tokenClient = new TokenClient(discoveryResponse.TokenEndpoint, "auth_console"))
             using (var refreshTokenHandler = new RefreshTokenDelegatingHandler(tokenClient, data.RefreshToken, data.AccessToken) { InnerHandler = new HttpClientHandler() })
-            using (var clientsClient = new ClientsHttpClient(authority, refreshTokenHandler))
-            using (var apiResourcesClient = new ApiResourcesHttpClient(authority, refreshTokenHandler))
-            using (var identityResourcesClient = new IdentityResourcesHttpClient(authority, refreshTokenHandler))
-            using (var rolesClient = new RolesHttpClient(authority, refreshTokenHandler))
-            using (var usersClient = new UsersHttpClient(authority, refreshTokenHandler))
-            using (var identityProvidersClient = new IdentityProvidersHttpClient(authority, refreshTokenHandler))
+            using (var clientsClient = new ClientsHttpClient(apiUri, refreshTokenHandler))
+            using (var apiResourcesClient = new ApiResourcesHttpClient(apiUri, refreshTokenHandler))
+            using (var identityResourcesClient = new IdentityResourcesHttpClient(apiUri, refreshTokenHandler))
+            using (var rolesClient = new RolesHttpClient(apiUri, refreshTokenHandler))
+            using (var usersClient = new UsersHttpClient(apiUri, refreshTokenHandler))
+            using (var identityProvidersClient = new IdentityProvidersHttpClient(apiUri, refreshTokenHandler))
             {
                 refreshTokenHandler.TokenRefreshed += (sender, e) =>
                 {

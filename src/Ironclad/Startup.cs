@@ -93,6 +93,11 @@ namespace Ironclad
                     options.UserInteraction.CustomRedirectReturnUrlParameter = "return_url";
                     options.UserInteraction.ErrorUrl = "/signin/error";
                     options.UserInteraction.ErrorIdParameter = "error_id";
+
+                    if (!string.IsNullOrEmpty(this.settings.Api?.Uri))
+                    {
+                        options.Discovery.CustomEntries.Add("api_uri", this.settings.Api?.Uri);
+                    }
                 })
                 .AddSigningCredentialFromSettings(this.settings, this.loggerFactory)
                 .AddConfigurationStore(this.settings.Server.Database)
