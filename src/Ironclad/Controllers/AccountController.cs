@@ -1,4 +1,4 @@
-// Copyright (c) Lykke Corp.
+﻿// Copyright (c) Lykke Corp.
 // See the LICENSE file in the project root for more information.
 
 #pragma warning disable CA1054
@@ -368,7 +368,7 @@ namespace Ironclad.Controllers
             if (this.websiteSettings.RestrictedDomains.Any() && email?.Contains('@', StringComparison.OrdinalIgnoreCase) == true)
             {
                 // we can only do this if we have an email claim
-                var domainName = email.Substring(email.IndexOf('@', StringComparison.OrdinalIgnoreCase));
+                var domainName = email.Substring(email.IndexOf('@', StringComparison.OrdinalIgnoreCase) + 1);
                 if (!this.websiteSettings.RestrictedDomains.Contains(domainName))
                 {
                     this.logger.LogWarning("User {Sub} failed to log in with {Name} provider (no account).", info.ProviderKey, info.LoginProvider);
