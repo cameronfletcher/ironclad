@@ -15,7 +15,7 @@ namespace Ironclad.Client
     /// </summary>
     public sealed class RolesHttpClient : HttpClientBase,  IRolesClient
     {
-        private const string ApiPath = "/api/roles";
+        private const string ApiPath = "/roles";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RolesHttpClient"/> class.
@@ -41,7 +41,7 @@ namespace Ironclad.Client
         /// <inheritdoc />
         public async Task<bool> RoleExistsAsync(string role, CancellationToken cancellationToken = default)
         {
-            var url = this.RelativeUrl($"/api/roles/{WebUtility.UrlEncode(NotNull(role, nameof(role)))}");
+            var url = this.RelativeUrl($"/roles/{WebUtility.UrlEncode(NotNull(role, nameof(role)))}");
 
             try
             {

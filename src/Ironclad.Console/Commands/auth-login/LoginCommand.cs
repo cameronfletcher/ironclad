@@ -105,9 +105,8 @@ namespace Ironclad.Console.Commands
             context.Console.WriteLine($"Logging in to {this.Authority} ({this.apiResponse.Title} v{this.apiResponse.Version} running on {this.apiResponse.OS})...");
 
             var data = context.Repository.GetCommandData();
-            if (data != null && data.Authority == this.Authority)
+            if (this.AlreadyLoggedIn(data))
             {
-                // already logged in?
                 var discoveryResponse = default(DiscoveryResponse);
                 using (var discoveryClient = new DiscoveryClient(this.Authority) { Policy = new DiscoveryPolicy { ValidateIssuerName = false } })
                 {
@@ -155,10 +154,19 @@ namespace Ironclad.Console.Commands
                 {
                     Authority = this.Authority,
                     AccessToken = result.AccessToken,
+                    AccessTokenExpiration = result.AccessTokenExpiration,
                     RefreshToken = result.RefreshToken,
                 });
 
             context.Console.WriteLine($"Logged in as {result.User.Identity.Name}.");
+        }
+
+        private bool AlreadyLoggedIn(CommandData data)
+        {
+            return data != null &&
+                data.Authority == this.Authority &&
+                data.AccessTokenExpiration.HasValue &&
+                data.AccessTokenExpiration > DateTime.Now;
         }
 
         public class Reset : ICommand

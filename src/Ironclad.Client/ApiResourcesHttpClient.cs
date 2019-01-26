@@ -13,7 +13,7 @@ namespace Ironclad.Client
     /// </summary>
     public sealed class ApiResourcesHttpClient : HttpClientBase, IApiResourcesClient
     {
-        private const string ApiPath = "/api/apiresources";
+        private const string ApiPath = "/resources";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiResourcesHttpClient"/> class.
