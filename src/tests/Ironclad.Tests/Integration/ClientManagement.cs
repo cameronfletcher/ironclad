@@ -26,7 +26,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanAddClientMinimum()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var expectedClient = new Client
             {
                 Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -45,7 +45,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanAddClient()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var expectedClient = new Client
             {
                 Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -82,7 +82,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanGetClientSummaries()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var expectedClient = new Client
             {
                 Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -103,7 +103,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanGetClientSummariesWithQuery()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var client1 = new Client { Id = "query" };
             var client2 = new Client { Id = "query_test_02" };
             var client3 = new Client { Id = "query_test_03" };
@@ -126,7 +126,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanModifyClient()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var originalClient = new Client
             {
                 Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -187,7 +187,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanRemoveClient()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var client = new Client
             {
                 Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -209,7 +209,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanUseClientCredentialsClient()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var client = new Client
             {
                 Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -233,7 +233,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanUseImplicitClient()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var client = new Client
             {
                 Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -264,7 +264,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanUseHybridClient()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var client = new Client
             {
                 Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -305,7 +305,7 @@ namespace Ironclad.Tests.Integration
         public void CannotAddInvalidClient()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var client = new Client
             {
                 Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -323,7 +323,7 @@ namespace Ironclad.Tests.Integration
         public async Task CannotAddDuplicateClient()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var client = new Client
             {
                 Id = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -343,7 +343,7 @@ namespace Ironclad.Tests.Integration
         public void CannotModifyAuthorizationServerManagementConsole()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var client = new Client
             {
                 Id = "auth_console",
@@ -361,7 +361,7 @@ namespace Ironclad.Tests.Integration
         public void CannotRemoveAuthorizationServerManagementConsole()
         {
             // arrange
-            var httpClient = new ClientsHttpClient(this.Authority, this.Handler);
+            var httpClient = new ClientsHttpClient(this.ApiUri, this.Handler);
             var clientId = "auth_console";
 
             // act

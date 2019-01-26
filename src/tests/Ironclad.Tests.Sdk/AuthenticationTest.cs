@@ -30,6 +30,12 @@ namespace Ironclad.Tests.Sdk
         protected string Authority => this.fixture.Authority;
 
         /// <summary>
+        /// Gets the api uri.
+        /// </summary>
+        /// <value>The api uri.</value>
+        protected string ApiUri => this.fixture.ApiUri;
+
+        /// <summary>
         /// Gets the authorized HTTP message handler.
         /// </summary>
         /// <value>The handler.</value>

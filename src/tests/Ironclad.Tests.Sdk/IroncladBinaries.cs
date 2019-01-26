@@ -14,15 +14,17 @@ namespace Ironclad.Tests.Sdk
     internal class IroncladBinaries : IAsyncLifetime
     {
         private readonly string authority;
+        private readonly string apiUri;
         private readonly int port;
         private readonly string connectionString;
         private readonly IroncladProbe probe;
 
         private Process process;
 
-        public IroncladBinaries(string authority, int port, string connectionString)
+        public IroncladBinaries(string authority, string apiUri, int port, string connectionString)
         {
             this.authority = authority ?? throw new ArgumentNullException(nameof(authority));
+            this.apiUri = authority ?? throw new ArgumentNullException(nameof(apiUri));
             this.port = port;
             this.connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             this.probe = new IroncladProbe(this.authority, 2, 20);
@@ -31,7 +33,7 @@ namespace Ironclad.Tests.Sdk
         public async Task InitializeAsync()
         {
             var path = string.Format(CultureInfo.InvariantCulture, "..{0}..{0}..{0}..{0}..{0}Ironclad{0}Ironclad.csproj", Path.DirectorySeparatorChar);
-            var arguments = $"run -p {path} -- --server:database=\"{this.connectionString}\" --urls=http://*:{this.port} --api:authority={this.authority} --api:secret=secret";
+            var arguments = $"run -p {path} -- --server:database=\"{this.connectionString}\" --urls=http://*:{this.port} --api:authority={this.authority} --api:uri={this.apiUri} --api:secret=secret";
 
             this.process = Process.Start(
                 new ProcessStartInfo("dotnet", arguments)

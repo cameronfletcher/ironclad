@@ -11,9 +11,9 @@ namespace Ironclad.Tests.Sdk
     {
         private readonly IroncladProbe probe;
 
-        public IroncladContainer(string authority, int port, string connectionString, string dockerRegistry, NetworkCredential dockerCredentials, string dockerTag)
+        public IroncladContainer(string apiUri, int port, string connectionString, string dockerRegistry, NetworkCredential dockerCredentials, string dockerTag)
         {
-            authority = authority ?? throw new ArgumentNullException(nameof(authority));
+            apiUri = apiUri ?? throw new ArgumentNullException(nameof(apiUri));
             connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
 
             this.Configuration = new ContainerConfiguration
@@ -37,13 +37,14 @@ namespace Ironclad.Tests.Sdk
                     // LINK (Cameron): https://gist.github.com/cameronfletcher/58673a468c8ebbbf91b81e706063ba56
                     $"SERVER__DATABASE={connectionString}",
                     $"API__AUTHORITY=http://localhost",
+                    $"API__URI=http://localhost/api",
                     $"API__CLIENT_ID=auth_api",
                     $"API__SECRET=secret", // self-introspection secret (not a secret)
                 },
                 OutputDockerLogs = true
             };
 
-            this.probe = new IroncladProbe(authority, 2, 20);
+            this.probe = new IroncladProbe(apiUri, 2, 20);
         }
 
         public override async Task InitializeAsync()

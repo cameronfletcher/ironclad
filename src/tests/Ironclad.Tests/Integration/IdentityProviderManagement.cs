@@ -1,4 +1,4 @@
-// Copyright (c) Lykke Corp.
+﻿// Copyright (c) Lykke Corp.
 // See the LICENSE file in the project root for more information.
 
 namespace Ironclad.Tests.Feature
@@ -23,7 +23,7 @@ namespace Ironclad.Tests.Feature
         public async Task CanAddProviderMinimum()
         {
             // arrange
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var expectedProvider = CreateMinimumProvider();
 
             // act
@@ -40,7 +40,7 @@ namespace Ironclad.Tests.Feature
         [Fact]
         public async Task CanAddProvider()
         {
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var expectedProvider = new IdentityProvider
             {
                 Name = $"IntegrationTest{Guid.NewGuid():N}",
@@ -66,7 +66,7 @@ namespace Ironclad.Tests.Feature
         public async Task CanGetProviderSummaries()
         {
             // arrange
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var expectedProvider = CreateMinimumProvider();
 
             await httpClient.AddIdentityProviderAsync(expectedProvider).ConfigureAwait(false);
@@ -86,7 +86,7 @@ namespace Ironclad.Tests.Feature
         public async Task CanGetClientSummariesWithQuery()
         {
             // arrange
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var prefix = $"{DateTime.Now.Ticks}-query_";
             var provider1 = CreateMinimumProvider();
             var provider2 = CreateMinimumProvider(prefix);
@@ -110,7 +110,7 @@ namespace Ironclad.Tests.Feature
         public async Task CanRemoveProvider()
         {
             // arrange
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var provider = CreateMinimumProvider();
 
             await httpClient.AddIdentityProviderAsync(provider).ConfigureAwait(false);
@@ -128,7 +128,7 @@ namespace Ironclad.Tests.Feature
         public void CannotAddBlankProvider()
         {
             // arrange
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var provider = new IdentityProvider();
 
             // act
@@ -142,7 +142,7 @@ namespace Ironclad.Tests.Feature
         public void CannotAddProviderWithBadCallback()
         {
             // arrange
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var provider = CreateMinimumProvider();
             provider.CallbackPath = "nonsense";
 
@@ -157,7 +157,7 @@ namespace Ironclad.Tests.Feature
         public void CannotAddProviderWithNoAuthority()
         {
             // arrange
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var provider = CreateMinimumProvider();
             provider.Authority = null;
 
@@ -172,7 +172,7 @@ namespace Ironclad.Tests.Feature
         public void CannotAddProviderWithNoClientId()
         {
             // arrange
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var provider = CreateMinimumProvider();
             provider.ClientId = null;
 
@@ -187,7 +187,7 @@ namespace Ironclad.Tests.Feature
         public async Task CannotAddDuplicateProvider()
         {
             // arrange
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var provider = CreateMinimumProvider();
 
             await httpClient.AddIdentityProviderAsync(provider).ConfigureAwait(false);
@@ -203,7 +203,7 @@ namespace Ironclad.Tests.Feature
         public async Task CanUseExternalProvider()
         {
             // arrange
-            var httpClient = new IdentityProvidersHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityProvidersHttpClient(this.ApiUri, this.Handler);
             var provider = new IdentityProvider
             {
                 Name = $"idsvr-{Guid.NewGuid():N}",

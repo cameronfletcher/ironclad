@@ -30,6 +30,8 @@ namespace Ironclad.Tests.Sdk
 
         public string Authority => this.fixture.Authority;
 
+        public string ApiUri => this.fixture.ApiUri;
+
         public IApiResourcesClient ApiResourcesClient { get; private set; }
 
         public IClientsClient ClientsClient { get; private set; }

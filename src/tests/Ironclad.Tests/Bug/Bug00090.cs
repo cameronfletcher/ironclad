@@ -22,7 +22,7 @@ namespace Ironclad.Tests.Bug
         public void ShouldNotThrowInternalServerError()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var user = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),

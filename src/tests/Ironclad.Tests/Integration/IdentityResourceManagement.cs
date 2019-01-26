@@ -23,7 +23,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanAddIdentityResourceMinimum()
         {
             // arrange
-            var httpClient = new IdentityResourcesHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityResourcesHttpClient(this.ApiUri, this.Handler);
             var expectedResource = new IdentityResource
             {
                 Name = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -44,7 +44,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanAddIdentityResource()
         {
             // arrange
-            var httpClient = new IdentityResourcesHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityResourcesHttpClient(this.ApiUri, this.Handler);
             var expectedResource = new IdentityResource
             {
                 Name = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -66,7 +66,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanGetIdentityResourceSummaries()
         {
             // arrange
-            var httpClient = new IdentityResourcesHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityResourcesHttpClient(this.ApiUri, this.Handler);
             var expectedResource = new IdentityResource
             {
                 Name = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -88,7 +88,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanGetIdentityResourceSummariesWithQuery()
         {
             // arrange
-            var httpClient = new IdentityResourcesHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityResourcesHttpClient(this.ApiUri, this.Handler);
             var resource1 = new IdentityResource { Name = "query", UserClaims = { "name" } };
             var resource2 = new IdentityResource { Name = "query_test_02", UserClaims = { "name" } };
             var resource3 = new IdentityResource { Name = "query_test_03", UserClaims = { "name" } };
@@ -111,7 +111,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanModifyIdentityResource()
         {
             // arrange
-            var httpClient = new IdentityResourcesHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityResourcesHttpClient(this.ApiUri, this.Handler);
             var originalIdentityResource = new IdentityResource
             {
                 Name = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -143,7 +143,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanRemoveIdentityResource()
         {
             // arrange
-            var httpClient = new IdentityResourcesHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityResourcesHttpClient(this.ApiUri, this.Handler);
             var resource = new IdentityResource
             {
                 Name = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -166,7 +166,7 @@ namespace Ironclad.Tests.Integration
         public void CannotAddInvalidIdentityResource()
         {
             // arrange
-            var httpClient = new IdentityResourcesHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityResourcesHttpClient(this.ApiUri, this.Handler);
             var resource = new IdentityResource
             {
                 Name = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -184,7 +184,7 @@ namespace Ironclad.Tests.Integration
         public async Task CannotAddDuplicateIdentityResource()
         {
             // arrange
-            var httpClient = new IdentityResourcesHttpClient(this.Authority, this.Handler);
+            var httpClient = new IdentityResourcesHttpClient(this.ApiUri, this.Handler);
             var resource = new IdentityResource
             {
                 Name = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
