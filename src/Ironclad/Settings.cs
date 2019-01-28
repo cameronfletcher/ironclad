@@ -188,6 +188,8 @@ Please see https://gist.github.com/cameronfletcher/58673a468c8ebbbf91b81e706063b
 
             public string Secret { get; set; }
 
+            public string Uri { get; set; }
+
             private string client_id { get; set; }
 
             public bool IsValid() => !this.GetValidationErrors().Any();

@@ -26,7 +26,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanAddUserMinimum()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var expectedUser = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -44,7 +44,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanAddUser()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var expectedUser = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -68,7 +68,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanAddUserWithConfirmationEmail()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var expectedUser = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -100,7 +100,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanGetUserSummaries()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var expectedUser = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -121,7 +121,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanGetRoleSummariesWithQuery()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var user1 = new User { Username = "query" };
             var user2 = new User { Username = "query_test_02" };
             var user3 = new User { Username = "query_test_03" };
@@ -144,7 +144,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanModifyUser()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var originalUser = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -182,7 +182,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanRemoveUser()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var user = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -203,7 +203,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanUseUser()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var user = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -237,7 +237,7 @@ namespace Ironclad.Tests.Integration
         public void CannotAddInvalidUser()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var user = new User();
 
             // act
@@ -251,7 +251,7 @@ namespace Ironclad.Tests.Integration
         public async Task CannotAddDuplicateUser()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var user = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -270,7 +270,7 @@ namespace Ironclad.Tests.Integration
         public void CannotRemoveDefaultAdminUser()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var username = "admin";
 
             // act
@@ -284,7 +284,7 @@ namespace Ironclad.Tests.Integration
         public void CannotRemoveAdminRoleFromDefaultAdminUser()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var user = new User
             {
                 Username = "admin",
@@ -302,7 +302,7 @@ namespace Ironclad.Tests.Integration
         public void CannotAddUserWithNonExistingRole()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -323,7 +323,7 @@ namespace Ironclad.Tests.Integration
         public async Task CannotModifyUserRolesWithNonExistingRole()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -348,7 +348,7 @@ namespace Ironclad.Tests.Integration
         public async Task CannotModifyUserClaimsWithInvalidClaimValues()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -374,7 +374,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanRemoveUserClaims()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -409,7 +409,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanRemoveUserRoles()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -446,7 +446,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanAddUserToRoles()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -475,7 +475,7 @@ namespace Ironclad.Tests.Integration
         public async Task CannotAddUserToNonExistingRole()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -498,7 +498,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanRemoveUserFromRoles()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -528,7 +528,7 @@ namespace Ironclad.Tests.Integration
         public void CannotRemoveDefaultAdminUserFromAdminRole()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
 
             // act
             Func<Task> func = async () =>
@@ -542,7 +542,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanAddUserClaims()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -576,7 +576,7 @@ namespace Ironclad.Tests.Integration
         public async Task CannotAddUserClaimsWithInvalidClaimValues()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),
@@ -603,7 +603,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanRemoveUserClaim()
         {
             // arrange
-            var httpClient = new UsersHttpClient(this.Authority, this.Handler);
+            var httpClient = new UsersHttpClient(this.ApiUri, this.Handler);
             var model = new User
             {
                 Username = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture),

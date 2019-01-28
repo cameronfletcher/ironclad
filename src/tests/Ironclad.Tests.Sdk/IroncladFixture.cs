@@ -51,7 +51,7 @@ namespace Ironclad.Tests.Sdk
                     "Authentication fixture is running in TESTING mode (attempting to spin up ironclad from source, postgres from a docker container)"));
 
                 this.postgres = new PostgresContainer(this.settings.PostgresTag);
-                this.ironclad = new IroncladBinaries(this.settings.Authority, this.settings.Port, this.postgres.GetConnectionStringForHost());
+                this.ironclad = new IroncladBinaries(this.settings.Authority, this.settings.ApiUri, this.settings.Port, this.postgres.GetConnectionStringForHost());
             }
             else if (this.settings.UseDockerImage)
             {
@@ -60,7 +60,7 @@ namespace Ironclad.Tests.Sdk
 
                 this.postgres = new PostgresContainer(this.settings.PostgresTag);
                 this.ironclad = new IroncladContainer(
-                    this.settings.Authority,
+                    this.settings.ApiUri,
                     this.settings.Port,
                     this.postgres.GetConnectionStringForContainer(),
                     this.settings.DockerRegistry,
@@ -72,11 +72,13 @@ namespace Ironclad.Tests.Sdk
                 messageSink?.OnMessage(new DiagnosticMessage("Authentication fixture is running in EXTERNAL mode (attempting to connect to externally running ironclad)"));
 
                 this.postgres = null;
-                this.ironclad = new IroncladProbe(this.settings.Authority, 0, 15);
+                this.ironclad = new IroncladProbe(this.settings.ApiUri, 0, 15);
             }
         }
 
         public string Authority => this.settings.Authority;
+
+        public string ApiUri => this.settings.ApiUri;
 
         public async Task InitializeAsync()
         {
@@ -120,6 +122,8 @@ namespace Ironclad.Tests.Sdk
             public string PostgresTag => this.postgres_tag ?? "alpine";
 
             public string Authority => $"http://localhost:{this.Port}";
+
+            public string ApiUri => this.Authority + "/api";
 
             private int port { get; set; }
 

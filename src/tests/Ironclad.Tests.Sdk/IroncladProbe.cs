@@ -13,13 +13,13 @@ namespace Ironclad.Tests.Sdk
 
     internal class IroncladProbe : IAsyncLifetime
     {
-        private readonly string authority;
+        private readonly string apiUri;
         private readonly int initialWaitTimeInSeconds;
         private readonly int maxWaitTimeInSeconds;
 
-        public IroncladProbe(string authority, int initialWaitTimeInSeconds, int maxWaitTimeInSeconds)
+        public IroncladProbe(string apiUri, int initialWaitTimeInSeconds, int maxWaitTimeInSeconds)
         {
-            this.authority = authority ?? throw new ArgumentNullException(nameof(authority));
+            this.apiUri = apiUri ?? throw new ArgumentNullException(nameof(apiUri));
             this.initialWaitTimeInSeconds = initialWaitTimeInSeconds;
             this.maxWaitTimeInSeconds = maxWaitTimeInSeconds;
         }
@@ -43,7 +43,7 @@ namespace Ironclad.Tests.Sdk
 
                     try
                     {
-                        using (var response = await client.GetAsync(new Uri(this.authority + "/api"), token).ConfigureAwait(false))
+                        using (var response = await client.GetAsync(new Uri(this.apiUri), token).ConfigureAwait(false))
                         {
                             if (response.StatusCode == HttpStatusCode.OK)
                             {

@@ -1,4 +1,4 @@
-// Copyright (c) Lykke Corp.
+﻿// Copyright (c) Lykke Corp.
 // See the LICENSE file in the project root for more information.
 
 namespace Ironclad.Tests.Feature
@@ -30,10 +30,10 @@ namespace Ironclad.Tests.Feature
         [Background]
         public void Background()
         {
-            "Given a users client".x(() => this.usersClient = new UsersHttpClient(this.Authority, this.Handler));
-            "And an identity resources client".x(() => this.identityResourcesClient = new IdentityResourcesHttpClient(this.Authority, this.Handler));
-            "And an API resources client".x(() => this.apiResourcesClient = new ApiResourcesHttpClient(this.Authority, this.Handler));
-            "And a clients client".x(() => this.clientsClient = new ClientsHttpClient(this.Authority, this.Handler));
+            "Given a users client".x(() => this.usersClient = new UsersHttpClient(this.ApiUri, this.Handler));
+            "And an identity resources client".x(() => this.identityResourcesClient = new IdentityResourcesHttpClient(this.ApiUri, this.Handler));
+            "And an API resources client".x(() => this.apiResourcesClient = new ApiResourcesHttpClient(this.ApiUri, this.Handler));
+            "And a clients client".x(() => this.clientsClient = new ClientsHttpClient(this.ApiUri, this.Handler));
         }
 
         [Scenario]

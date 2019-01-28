@@ -13,7 +13,7 @@ namespace Ironclad.Client
     /// </summary>
     public sealed class IdentityProvidersHttpClient : HttpClientBase, IIdentityProvidersClient
     {
-        private const string ApiPath = "/api/providers";
+        private const string ApiPath = "/providers";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentityProvidersHttpClient"/> class.

@@ -21,7 +21,7 @@ namespace Ironclad.Tests.Bug
         public async Task ShouldCreateApiResourceWithDefaultScopeMatchingResourceName()
         {
             // arrange
-            var httpClient = new ApiResourcesHttpClient(this.Authority, this.Handler);
+            var httpClient = new ApiResourcesHttpClient(this.ApiUri, this.Handler);
             var expectedResource = new ApiResource
             {
                 Name = "scope_name",

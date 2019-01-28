@@ -23,7 +23,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanAddRole()
         {
             // arrange
-            var httpClient = new RolesHttpClient(this.Authority, this.Handler);
+            var httpClient = new RolesHttpClient(this.ApiUri, this.Handler);
             var role = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
 
             // act
@@ -38,7 +38,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanGetRoleSummaries()
         {
             // arrange
-            var httpClient = new RolesHttpClient(this.Authority, this.Handler);
+            var httpClient = new RolesHttpClient(this.ApiUri, this.Handler);
             var role = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
 
             await httpClient.AddRoleAsync(role).ConfigureAwait(false);
@@ -55,7 +55,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanGetRoleSummariesWithQuery()
         {
             // arrange
-            var httpClient = new RolesHttpClient(this.Authority, this.Handler);
+            var httpClient = new RolesHttpClient(this.ApiUri, this.Handler);
             var role1 = "query";
             var role2 = "query_test_02";
             var role3 = "query_test_03";
@@ -77,7 +77,7 @@ namespace Ironclad.Tests.Integration
         public async Task CanRemoveRole()
         {
             // arrange
-            var httpClient = new RolesHttpClient(this.Authority, this.Handler);
+            var httpClient = new RolesHttpClient(this.ApiUri, this.Handler);
             var role = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
 
             await httpClient.AddRoleAsync(role).ConfigureAwait(false);
@@ -95,7 +95,7 @@ namespace Ironclad.Tests.Integration
         public async Task CannotAddDuplicateRole()
         {
             // arrange
-            var httpClient = new RolesHttpClient(this.Authority, this.Handler);
+            var httpClient = new RolesHttpClient(this.ApiUri, this.Handler);
             var role = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
 
             await httpClient.AddRoleAsync(role).ConfigureAwait(false);
@@ -111,7 +111,7 @@ namespace Ironclad.Tests.Integration
         public void CannotRemoveAdminRole()
         {
             // arrange
-            var httpClient = new RolesHttpClient(this.Authority, this.Handler);
+            var httpClient = new RolesHttpClient(this.ApiUri, this.Handler);
             var role = "admin";
 
             // act

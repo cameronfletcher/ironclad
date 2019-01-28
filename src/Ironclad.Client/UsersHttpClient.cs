@@ -18,9 +18,9 @@ namespace Ironclad.Client
     /// </summary>
     public sealed class UsersHttpClient : HttpClientBase, IUsersClient
     {
-        private const string ApiPath = "/api/users";
-        private const string ApiClaimsPath = "/api/users/{0}/claims";
-        private const string ApiRolesPath = "/api/users/{0}/roles";
+        private const string ApiPath = "/users";
+        private const string ApiClaimsPath = "/users/{0}/claims";
+        private const string ApiRolesPath = "/users/{0}/roles";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UsersHttpClient"/> class.

@@ -36,6 +36,7 @@ namespace Ironclad.Console.Persistence
             {
                 Authority = data.Authority,
                 AccessToken = this.protector.Unprotect(data.AccessToken),
+                AccessTokenExpiration = data.AccessTokenExpiration,
                 RefreshToken = this.protector.Unprotect(data.RefreshToken),
             };
         }
@@ -54,6 +55,7 @@ namespace Ironclad.Console.Persistence
             {
                 Authority = commandData.Authority,
                 AccessToken = this.protector.Protect(commandData.AccessToken),
+                AccessTokenExpiration = commandData.AccessTokenExpiration,
                 RefreshToken = this.protector.Protect(commandData.RefreshToken),
             };
 
