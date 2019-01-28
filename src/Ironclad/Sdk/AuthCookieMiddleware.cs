@@ -25,7 +25,7 @@ namespace Ironclad.Sdk
 
         public async Task Invoke(HttpContext context)
         {
-            if (!this.RequiresSameSiteCookieFix(context))
+            if (!RequiresSameSiteCookieFix(context))
             {
                 await this.next.Invoke(context);
                 return;
@@ -68,7 +68,7 @@ namespace Ironclad.Sdk
         }
 
         // LINK: https://github.com/IdentityServer/IdentityServer4/issues/2595#issuecomment-425068595
-        private bool RequiresSameSiteCookieFix(HttpContext context)
+        private static bool RequiresSameSiteCookieFix(HttpContext context)
         {
             var userAgent = context.Request.Headers["User-Agent"].ToString();
             var groups = regex.Matches(userAgent);

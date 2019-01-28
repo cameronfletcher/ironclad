@@ -186,11 +186,15 @@ Please see https://gist.github.com/cameronfletcher/58673a468c8ebbbf91b81e706063b
 
             public string ClientId => this.client_id;
 
+            public string OmitUriForRequestsFrom => this.omit_uri_for_requests_from;
+
             public string Secret { get; set; }
 
             public string Uri { get; set; }
 
             private string client_id { get; set; }
+
+            private string omit_uri_for_requests_from { get; set; }
 
             public bool IsValid() => !this.GetValidationErrors().Any();
 

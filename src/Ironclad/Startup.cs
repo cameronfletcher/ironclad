@@ -7,6 +7,7 @@ namespace Ironclad
     using IdentityModel.Client;
     using IdentityServer4.AccessTokenValidation;
     using IdentityServer4.Postgresql.Extensions;
+    using IdentityServer4.ResponseHandling;
     using Ironclad.Application;
     using Ironclad.Authorization;
     using Ironclad.Data;
@@ -104,6 +105,9 @@ namespace Ironclad
                 .AddOperationalStore()
                 .AddAppAuthRedirectUriValidator()
                 .AddAspNetIdentity<ApplicationUser>();
+
+            services.AddTransient<IDiscoveryResponseGenerator, CustomDiscoveryResponseGenerator>(
+                serviceProvider => new CustomDiscoveryResponseGenerator(serviceProvider, this.settings.Api?.OmitUriForRequestsFrom));
 
             var authenticationServices = services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(
