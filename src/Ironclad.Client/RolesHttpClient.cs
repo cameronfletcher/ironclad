@@ -41,7 +41,7 @@ namespace Ironclad.Client
         /// <inheritdoc />
         public async Task<bool> RoleExistsAsync(string role, CancellationToken cancellationToken = default)
         {
-            var url = this.RelativeUrl($"/roles/{WebUtility.UrlEncode(NotNull(role, nameof(role)))}");
+            var url = this.RelativeUrl($"{ApiPath}/{WebUtility.UrlEncode(NotNull(role, nameof(role)))}");
 
             try
             {

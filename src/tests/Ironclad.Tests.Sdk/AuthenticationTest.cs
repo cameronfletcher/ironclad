@@ -30,9 +30,10 @@ namespace Ironclad.Tests.Sdk
         protected string Authority => this.fixture.Authority;
 
         /// <summary>
-        /// Gets the api uri.
+        /// Gets the api URI.
         /// </summary>
-        /// <value>The api uri.</value>
+        /// <value>The api URI.</value>
+#pragma warning disable CA1056
         protected string ApiUri => this.fixture.ApiUri;
 
         /// <summary>

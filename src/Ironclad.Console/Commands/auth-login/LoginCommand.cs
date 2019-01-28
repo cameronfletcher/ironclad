@@ -162,12 +162,7 @@ namespace Ironclad.Console.Commands
         }
 
         private bool AlreadyLoggedIn(CommandData data)
-        {
-            return data != null &&
-                data.Authority == this.Authority &&
-                data.AccessTokenExpiration.HasValue &&
-                data.AccessTokenExpiration > DateTime.Now;
-        }
+            => data != null && data.Authority == this.Authority && data.AccessTokenExpiration.HasValue && data.AccessTokenExpiration > DateTime.UtcNow;
 
         public class Reset : ICommand
         {

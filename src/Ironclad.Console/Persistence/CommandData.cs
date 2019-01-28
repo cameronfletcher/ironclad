@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Lykke Corp.
 // See the LICENSE file in the project root for more information.
-#pragma warning disable CA1056 // Uri properties should not be strings
 
 namespace Ironclad.Console.Persistence
 {
@@ -17,4 +16,3 @@ namespace Ironclad.Console.Persistence
         public string RefreshToken { get; set; }
     }
 }
-#pragma warning restore CA1056 // Uri properties should not be strings

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Lykke Corp.
 // See the LICENSE file in the project root for more information.
 
-#pragma warning disable SA1600, CS1591 // not required for this class
+#pragma warning disable SA1600, CS1591, CA1056 // not required for this class
 
 namespace Ironclad.Tests.Sdk
 {
