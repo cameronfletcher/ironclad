@@ -107,7 +107,7 @@ namespace Ironclad.Console
                 }
             }
 
-            var apiUri = discoveryResponse.TryGetString("api_uri") ?? authority + "/api";
+            var apiUri = data.ApiUri ?? discoveryResponse.TryGetString("api_uri") ?? authority + "/api";
 
             this.console.Write("Executing command against ");
             this.console.ForegroundColor = ConsoleColor.White;

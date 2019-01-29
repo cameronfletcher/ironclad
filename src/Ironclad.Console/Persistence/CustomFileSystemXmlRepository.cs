@@ -14,7 +14,7 @@ namespace Ironclad.Console.Persistence
 
     public class CustomFileSystemXmlRepository : FileSystemXmlRepository
     {
-        private const string RepositoryFolderName = "auth.exe";
+        private const string RepositoryFolderName = ".ironclad";
 
         public CustomFileSystemXmlRepository()
             : base(GetDefaultDataStorageDirectory(), NullLoggerFactory.Instance)
@@ -69,7 +69,7 @@ namespace Ironclad.Console.Persistence
             else if (homePath != null)
             {
                 // If LOCALAPPDATA and USERPROFILE are not present but HOME is, it's a good guess that this is a *NIX machine.  Use *NIX conventions for a folder name.
-                directoryInfo = new DirectoryInfo(Path.Combine(homePath, ".lykke", RepositoryFolderName));
+                directoryInfo = new DirectoryInfo(Path.Combine(homePath, RepositoryFolderName));
             }
             else if (!string.IsNullOrEmpty(localAppDataFromSystemPath))
             {
@@ -95,7 +95,7 @@ namespace Ironclad.Console.Persistence
             }
         }
 
-        private static DirectoryInfo GetKeyStorageDirectoryFromBaseAppDataPath(string basePath) => new DirectoryInfo(Path.Combine(basePath, "Lykke", RepositoryFolderName));
+        private static DirectoryInfo GetKeyStorageDirectoryFromBaseAppDataPath(string basePath) => new DirectoryInfo(Path.Combine(basePath, RepositoryFolderName));
 
         private void StoreElementCore(XElement element, string filename)
         {
