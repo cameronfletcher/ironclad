@@ -234,8 +234,6 @@ Please see https://gist.github.com/cameronfletcher/58673a468c8ebbbf91b81e706063b
             {
                 public string ClientId => this.client_id;
 
-                public string Secret { get; set; }
-
                 private string client_id { get; set; }
 
                 public bool IsValid() => !this.GetValidationErrors().Any();
@@ -245,11 +243,6 @@ Please see https://gist.github.com/cameronfletcher/58673a468c8ebbbf91b81e706063b
                     if (string.IsNullOrEmpty(this.ClientId))
                     {
                         yield return $"'{{0}}:{nameof(this.client_id).ToLowerInvariant()}' is null or empty.";
-                    }
-
-                    if (string.IsNullOrEmpty(this.Secret))
-                    {
-                        yield return $"'{{0}}:{nameof(this.Secret).ToLowerInvariant()}' is null or empty.";
                     }
                 }
             }
