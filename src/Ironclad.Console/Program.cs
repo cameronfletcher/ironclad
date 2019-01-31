@@ -96,6 +96,12 @@ namespace Ironclad.Console
                 authority = loginCommand.Authority;
             }
 
+            if (string.IsNullOrEmpty(authority))
+            {
+                this.console.WriteLine("Not logged in.");
+                return 0;
+            }
+
             var discoveryResponse = default(DiscoveryResponse);
             using (var discoveryClient = new DiscoveryClient(authority) { Policy = new DiscoveryPolicy { ValidateIssuerName = false } })
             {
@@ -107,7 +113,7 @@ namespace Ironclad.Console
                 }
             }
 
-            var apiUri = discoveryResponse.TryGetString("api_uri") ?? authority + "/api";
+            var apiUri = data.ApiUri ?? discoveryResponse.TryGetString("api_uri") ?? authority + "/api";
 
             this.console.Write("Executing command against ");
             this.console.ForegroundColor = ConsoleColor.White;

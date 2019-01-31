@@ -35,6 +35,7 @@ namespace Ironclad.Console.Persistence
             return new CommandData
             {
                 Authority = data.Authority,
+                ApiUri = data.ApiUri,
                 AccessToken = this.protector.Unprotect(data.AccessToken),
                 AccessTokenExpiration = data.AccessTokenExpiration,
                 RefreshToken = this.protector.Unprotect(data.RefreshToken),
@@ -45,7 +46,7 @@ namespace Ironclad.Console.Persistence
         {
             if (commandData == null)
             {
-                var filename = Path.Combine(this.innerRepository.Directory.FullName, "command-data.xml");
+                var filename = Path.Combine(this.innerRepository.Directory.FullName, "config.xml");
                 File.Delete(filename); // won't throw if the file doesn't exist
                 return;
             }
@@ -54,6 +55,7 @@ namespace Ironclad.Console.Persistence
             var data = new CommandData
             {
                 Authority = commandData.Authority,
+                ApiUri = commandData.ApiUri,
                 AccessToken = this.protector.Protect(commandData.AccessToken),
                 AccessTokenExpiration = commandData.AccessTokenExpiration,
                 RefreshToken = this.protector.Protect(commandData.RefreshToken),
@@ -65,7 +67,7 @@ namespace Ironclad.Console.Persistence
                 Serializer.Serialize(streamWriter, data);
 
                 var xml = XElement.Parse(Encoding.ASCII.GetString(memoryStream.ToArray()));
-                this.innerRepository.StoreElement(xml, "command-data");
+                this.innerRepository.StoreElement(xml, "config");
             }
         }
     }

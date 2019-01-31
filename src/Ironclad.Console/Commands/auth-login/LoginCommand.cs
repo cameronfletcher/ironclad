@@ -16,6 +16,7 @@ namespace Ironclad.Console.Commands
     internal class LoginCommand : ICommand
     {
         private Api apiResponse;
+        private string apiUri;
 
         private LoginCommand()
         {
@@ -33,6 +34,7 @@ namespace Ironclad.Console.Commands
 
             // options
             var optionReset = app.Option("-r|--reset", "Resets the authorization context", CommandOptionType.NoValue);
+            var optionApiUri = app.Option("-a|--api", "Specifies a custom API URI to use", CommandOptionType.SingleValue, config => config.ShowInHelpText = false);
             app.HelpOption();
 
             // action (for this command)
@@ -66,7 +68,7 @@ namespace Ironclad.Console.Commands
                         }
                     }
 
-                    var apiUri = discoveryResponse.TryGetString("api_uri") ?? authority;
+                    var apiUri = optionApiUri.Value() ?? discoveryResponse.TryGetString("api_uri") ?? authority + "/api";
 
                     var apiResponse = default(Api);
                     using (var client = new HttpClient())
@@ -96,7 +98,7 @@ namespace Ironclad.Console.Commands
                         return;
                     }
 
-                    options.Command = new LoginCommand { Authority = authority, apiResponse = apiResponse };
+                    options.Command = new LoginCommand { Authority = authority, apiResponse = apiResponse, apiUri = apiUri };
                 });
         }
 
@@ -153,6 +155,7 @@ namespace Ironclad.Console.Commands
                 new CommandData
                 {
                     Authority = this.Authority,
+                    ApiUri = this.apiUri,
                     AccessToken = result.AccessToken,
                     AccessTokenExpiration = result.AccessTokenExpiration,
                     RefreshToken = result.RefreshToken,
