@@ -96,6 +96,12 @@ namespace Ironclad.Console
                 authority = loginCommand.Authority;
             }
 
+            if (string.IsNullOrEmpty(authority))
+            {
+                this.console.WriteLine("Not logged in.");
+                return 0;
+            }
+
             var discoveryResponse = default(DiscoveryResponse);
             using (var discoveryClient = new DiscoveryClient(authority) { Policy = new DiscoveryPolicy { ValidateIssuerName = false } })
             {
