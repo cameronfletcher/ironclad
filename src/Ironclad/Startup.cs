@@ -132,11 +132,17 @@ namespace Ironclad
             if (this.settings.Idp?.Google.IsValid() == true)
             {
                 this.logger.LogInformation("Configuring Google identity provider");
-                authenticationServices.AddGoogle(
+                authenticationServices.AddOpenIdConnect(
+                    authenticationScheme: "Google",
+                    displayName: "Google",
                     options =>
                     {
+                        options.Authority = "https://accounts.google.com/";
                         options.ClientId = this.settings.Idp.Google.ClientId;
-                        options.ClientSecret = this.settings.Idp.Google.Secret;
+                        options.CallbackPath = "/signin-google";
+                        options.SignedOutCallbackPath = "/signout-callback-google";
+                        options.RemoteSignOutPath = "/signout-google";
+                        options.Scope.Add("email");
                     });
             }
 
