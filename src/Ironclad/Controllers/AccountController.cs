@@ -70,7 +70,7 @@ namespace Ironclad.Controllers
                 return this.ExternalLogin(context.IdP, returnUrl);
             }
 
-            if (!this.websiteSettings.ShowLoginScreen)
+            if (!this.websiteSettings.ShowLoginScreen == true)
             {
                 return this.RedirectToAction(nameof(HomeController.Index), "Home");
             }

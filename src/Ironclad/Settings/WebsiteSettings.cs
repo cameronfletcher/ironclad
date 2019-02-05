@@ -14,9 +14,6 @@ namespace Ironclad.Models
         // HACK (Cameron): This really doesn't belong here.
         public IEnumerable<string> RestrictedDomains { get; set; }
 
-        public bool ShowLoginScreen => this.show_login_screen.HasValue ? this.show_login_screen.Value : true;
-
-#pragma warning disable IDE1006, SA1300
-        private bool? show_login_screen { get; set; }
+        public bool? ShowLoginScreen { get; set; }
     }
 }

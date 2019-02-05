@@ -14,6 +14,7 @@ namespace Ironclad
     using Ironclad.Models;
     using Ironclad.Sdk;
     using Ironclad.Services.Email;
+    using Ironclad.Settings;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.DataProtection;
@@ -33,15 +34,15 @@ namespace Ironclad
     {
         private readonly ILogger<Startup> logger;
         private readonly ILoggerFactory loggerFactory;
-        private readonly Settings settings;
+        private readonly IroncladSettings settings;
         private readonly WebsiteSettings websiteSettings;
 
         public Startup(ILogger<Startup> logger, ILoggerFactory loggerFactory, IConfiguration configuration)
         {
             this.logger = logger;
             this.loggerFactory = loggerFactory;
-            this.settings = configuration.Get<Settings>(options => options.BindNonPublicProperties = true);
-            this.websiteSettings = configuration.GetSection("website").Get<WebsiteSettings>(options => options.BindNonPublicProperties = true) ?? new WebsiteSettings();
+            this.settings = configuration.Get<IroncladSettings>(options => options.BindPropertiesUsingSnakeCaseNamingStrategy = true);
+            this.websiteSettings = configuration.GetSection("website").Get<WebsiteSettings>(options => options.BindPropertiesUsingSnakeCaseNamingStrategy = true) ?? new WebsiteSettings();
             this.settings.Validate();
 
             // HACK (Cameron): Should not be necessary. But is. Needs refactoring.
@@ -129,7 +130,7 @@ namespace Ironclad
                     })
                 .AddExternalIdentityProviders();
 
-            if (this.settings.Idp?.Google.IsValid() == true)
+            if (this.settings.Idp?.Google != null)
             {
                 this.logger.LogInformation("Configuring Google identity provider");
                 authenticationServices.AddOpenIdConnect(
@@ -147,7 +148,7 @@ namespace Ironclad
             }
 
             // TODO (Cameron): This is a bit messy. I think ultimately this should be configurable inside the application itself.
-            if (this.settings.Mail?.IsValid() == true)
+            if (this.settings.Mail != null)
             {
                 services.AddSingleton<IEmailSender>(
                     new EmailSender(
@@ -164,7 +165,7 @@ namespace Ironclad
                 services.AddSingleton<IEmailSender>(new NullEmailSender());
             }
 
-            if (this.settings.Server?.DataProtection?.IsValid() == true)
+            if (this.settings.Server?.DataProtection != null)
             {
                 services.AddDataProtection()
                     .PersistKeysToAzureBlobStorage(new Uri(this.settings.Server.DataProtection.KeyfileUri))
@@ -190,7 +191,7 @@ namespace Ironclad
                 app.UseDatabaseErrorPage();
             }
 
-            if (this.settings.Server.RespectXForwardedForHeaders)
+            if (this.settings.Server.RespectXForwardedForHeaders == true)
             {
                 var forwardedHeadersOptions = new ForwardedHeadersOptions
                 {

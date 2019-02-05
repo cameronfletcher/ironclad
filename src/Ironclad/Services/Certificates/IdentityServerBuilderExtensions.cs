@@ -4,12 +4,13 @@
 namespace Ironclad
 {
     using Ironclad.Services.Certificates;
+    using Ironclad.Settings;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
     internal static class IdentityServerBuilderExtensions
     {
-        public static IIdentityServerBuilder AddSigningCredentialFromSettings(this IIdentityServerBuilder builder, Settings settings, ILoggerFactory loggerFactory)
+        public static IIdentityServerBuilder AddSigningCredentialFromSettings(this IIdentityServerBuilder builder, IroncladSettings settings, ILoggerFactory loggerFactory)
         {
             if (settings.Server.SigningCertificate == null)
             {
