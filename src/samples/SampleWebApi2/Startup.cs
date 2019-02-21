@@ -29,7 +29,7 @@
                     options =>
                     {
                         options.Authority = "http://localhost:5005/";   // the IdentityServer root URL (used for discovery)
-                        options.Audience = "lykke";                // the name of the web API (used to scope access)
+                        options.Audience = "lykke";                     // the name of the web API (used to scope access)
 
                         // not to be set in production!
                         options.RequireHttpsMetadata = false;           // allow non-HTTPS for testing only
@@ -37,7 +37,7 @@
                     options =>
                     {
                         options.Authority = "http://localhost:5005/";   // the IdentityServer root URL (used for discovery)
-                        options.ClientId = "lykke";                // the name of the web API (used to scope access)
+                        options.ClientId = "lykke";                     // the name of the web API (used to scope access)
                         options.ClientSecret = "secret";                // the secret associated with the introspection endpoint for reference token validation and claims
 
                         // this option allows setting a fixed (custom) issuer name for the tokens
