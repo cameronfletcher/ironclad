@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{6611706E-C
 		..\build.cmd = ..\build.cmd
 		..\build.ps1 = ..\build.ps1
 		..\build.sh = ..\build.sh
+		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
 		Directory.Build.props = Directory.Build.props
 		..\Dockerfile = ..\Dockerfile
 		Ironclad.ruleset = Ironclad.ruleset
