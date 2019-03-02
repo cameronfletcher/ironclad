@@ -8,7 +8,7 @@
     <NoWarn>$(NoWarn);1701;1702;1705;IDE0039;CA1822</NoWarn>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
-    <CodeAnalysisRuleSet>../../Ironclad.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>../Ironclad.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +28,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <AdditionalFiles Include="../../stylecop.json" />
+    <AdditionalFiles Include="..\stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ironclad.Client\Ironclad.Client.csproj" />
+    <ProjectReference Include="..\..\src\Ironclad.Client\Ironclad.Client.csproj" />
   </ItemGroup>
 
 </Project>

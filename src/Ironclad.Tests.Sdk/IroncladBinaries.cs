@@ -32,7 +32,7 @@ namespace Ironclad.Tests.Sdk
 
         public async Task InitializeAsync()
         {
-            var path = string.Format(CultureInfo.InvariantCulture, "..{0}..{0}..{0}..{0}..{0}Ironclad{0}Ironclad.csproj", Path.DirectorySeparatorChar);
+            var path = string.Format(CultureInfo.InvariantCulture, "..{0}..{0}..{0}..{0}..{0}src{0}Ironclad{0}Ironclad.csproj", Path.DirectorySeparatorChar);
             var arguments = $"run -p {path} -- --server:database=\"{this.connectionString}\" --urls=http://*:{this.port} --api:authority={this.authority} --api:uri={this.apiUri} --api:secret=secret";
 
             this.process = Process.Start(

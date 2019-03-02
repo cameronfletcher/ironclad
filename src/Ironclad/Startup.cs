@@ -110,6 +110,10 @@ namespace Ironclad
             services.AddTransient<IDiscoveryResponseGenerator, CustomDiscoveryResponseGenerator>(
                 serviceProvider => new CustomDiscoveryResponseGenerator(serviceProvider, this.settings.Api?.OmitUriForRequestsFrom));
 
+            this.logger.LogInformation("API Authority set to {authority}", this.settings.Api.Authority);
+            this.logger.LogInformation("API Audience set to {audience}", this.settings.Api.Audience);
+            this.logger.LogInformation("API Client ID set to {client_id}", this.settings.Api.ClientId);
+
             var authenticationServices = services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(
                     "token",
