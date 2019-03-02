@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ironclad.Tests.Sdk\Ironclad.Tests.Sdk.csproj" />
+    <ProjectReference Include="..\..\src\Ironclad.Tests.Sdk\Ironclad.Tests.Sdk.csproj" />
   </ItemGroup>
 
   <ItemGroup>

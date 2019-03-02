@@ -30,13 +30,13 @@
   <ItemGroup>
     <AdditionalFiles Include="../../stylecop.json" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <ProjectReference Include="..\..\Ironclad.Client\Ironclad.Client.csproj" />
+    <None Include="..\..\..\LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+    <ProjectReference Include="..\Ironclad.Client\Ironclad.Client.csproj" />
   </ItemGroup>
 
 </Project>
