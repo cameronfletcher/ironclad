@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <IsPackable>false</IsPackable>
-    <CodeAnalysisRuleSet>../../Ironclad.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>../../src/Ironclad.ruleset</CodeAnalysisRuleSet>
     <LangVersion>latest</LangVersion>
     <NoWarn>$(NoWarn);1701;1702;1705;IDE0039;CA1822</NoWarn>
   </PropertyGroup>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="../../stylecop.json" />
+    <AdditionalFiles Include="..\..\src\stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ironclad.Tests.Sdk\Ironclad.Tests.Sdk.csproj" />
+    <ProjectReference Include="..\..\src\Ironclad.Tests.Sdk\Ironclad.Tests.Sdk.csproj" />
   </ItemGroup>
 
   <ItemGroup>

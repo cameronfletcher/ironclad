@@ -37,7 +37,7 @@ namespace Ironclad.Tests.Sdk
                     // LINK (Cameron): https://gist.github.com/cameronfletcher/58673a468c8ebbbf91b81e706063ba56
                     $"SERVER__DATABASE={connectionString}",
                     $"API__AUTHORITY=http://localhost",
-                    $"API__URI=http://localhost/api",
+                    $"API__URI={apiUri}",
                     $"API__CLIENT_ID=auth_api",
                     $"API__SECRET=secret", // self-introspection secret (not a secret)
                 },

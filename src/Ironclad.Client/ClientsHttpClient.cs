@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Lykke Corp.
 // See the LICENSE file in the project root for more information.
 
+#pragma warning disable CA1054
+
 namespace Ironclad.Client
 {
     using System.Net;
@@ -18,10 +20,10 @@ namespace Ironclad.Client
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientsHttpClient"/> class.
         /// </summary>
-        /// <param name="authority">The authority.</param>
+        /// <param name="apiUri">The API URI.</param>
         /// <param name="innerHandler">The inner handler.</param>
-        public ClientsHttpClient(string authority, HttpMessageHandler innerHandler = null)
-            : base(authority, innerHandler)
+        public ClientsHttpClient(string apiUri, HttpMessageHandler innerHandler = null)
+            : base(apiUri, innerHandler)
         {
         }
 

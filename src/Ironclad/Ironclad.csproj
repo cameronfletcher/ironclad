@@ -55,7 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="../stylecop.json" />
+    <AdditionalFiles Include="..\stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -80,34 +80,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="appsettings.Custom.json">
+    <None Update="appsettings.Custom.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="appsettings.Docker.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+    </None>
+    <None Update="appsettings.Docker.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="appsettings.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+    </None>
+    <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.Custom.json">
-      <DependentUpon>appsettings.json</DependentUpon>
+    <Content Update="appsettings.Custom.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="appsettings.Docker.json">
-      <DependentUpon>appsettings.json</DependentUpon>
+    </Content>
+    <Content Update="appsettings.Docker.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="appsettings.json">
+    </Content>
+    <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="VisualStudio.Dockerfile">
-      <DependentUpon>Dockerfile</DependentUpon>
-    </None>
+    </Content>
   </ItemGroup>
-
+  
   <ItemGroup>
     <Folder Include="WebApi\Dto\" />
   </ItemGroup>
