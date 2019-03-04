@@ -14,7 +14,7 @@ This project requires a running instance of [Postgres](https://www.postgresql.or
 To download and install Postgres you can follow the instructions [here](https://www.postgresql.org/download/).
 It is further possible to install Postgres as a [stand-alone installation](http://www.postgresonline.com/journal/archives/172-Starting-PostgreSQL-in-windows-without-install.html) from the binaries or run postgres in a docker container using the following command:
 ```
-docker run --name postgres -e POSTGRES_PASSWORD=<password> -e POSTGRES_DB=ironclad -d -p 5432:5432 postgres:10.1-alpine
+docker run --name postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ironclad -d -p 5432:5432 postgres:10.1-alpine
 ```
 NOTE: If you are running Ironclad inside a docker container pointing to Postgres running on your Windows machine then make sure to set the host in the connection string to ```docker.for.win.localhost```.
 
@@ -31,11 +31,13 @@ eg. (please note: secret values are invalid)
 
     ```json
     {
-      "ConnectionStrings": {
-        "Ironclad": "Host=localhost;Database=ironclad;Username=username;Password=password;"
+      "server": {
+        "database": "Host=localhost;Database=ironclad;Username=postgres;Password=postgres;Port=5432;"
       },
-      "Google-ClientId": "client_id",
-      "Google-Secret": "secret"
+      "api": {
+        "client_id": "auth_api",
+        "secret": "api_secret"
+      }
     }
     ```
 
@@ -43,9 +45,9 @@ eg. (please note: secret values are invalid)
 You need to configure the [user secrets](https://blogs.msdn.microsoft.com/mihansen/2017/09/10/managing-secrets-in-net-core-2-0-apps/) for the project. This can be done via the command line in either Windows or Linux. You can set the secrets using the following command from within the ```src/Ironclad``` folder. You may need to run a ```dotnet restore``` before you try the following commands.
 
     ```cmd
-    dotnet user-secrets set "ConnectionStrings:Ironclad" "Host=localhost;Database=ironclad;Username=username;Password=password;"
-    dotnet user-secrets set Google-ClientId "client_id"
-    dotnet user-secrets set Google-Secret "secret"
+    dotnet user-secrets set "server:database" "Host=localhost;Database=ironclad;Username=username;Password=password;"
+    dotnet user-secrets set "api:client_id" "auth_api"
+    dotnet user-secrets set "api:secret" "api_secret"
     ```
 
 
@@ -56,9 +58,9 @@ The contents of the `.env` configuration file should match the [expected require
 eg.  (please note: secret values are invalid)
 
     ```cmd
-    IRONCLAD_CONNECTIONSTRING=Host=localhost;Database=ironclad;Username=username;Password=password;
-    GOOGLE_CLIENT_ID=client_id
-    GOOGLE_SECRET=secret
+    SERVER__DATABASE=Host=localhost;Database=ironclad;Username=username;Password=password;
+    API__CLIENT_ID=auth_api
+    API__SECRET=api_secret
     ```
 
 #### Optional Machine Specific Configuration
