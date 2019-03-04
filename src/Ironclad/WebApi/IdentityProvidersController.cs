@@ -127,7 +127,7 @@ namespace Ironclad.WebApi
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(new { Message = ex.Message });
+                return this.BadRequest(new { ex.Message });
             }
 
             this.logger.LogInformation($"Added '{identityProvider.Name}' identity provider");

@@ -11,6 +11,7 @@ namespace Ironclad
     using Ironclad.Application;
     using Ironclad.Authorization;
     using Ironclad.Data;
+    using Ironclad.ExternalIdentityProvider.Persistence;
     using Ironclad.Models;
     using Ironclad.Sdk;
     using Ironclad.Services.Email;
@@ -129,23 +130,6 @@ namespace Ironclad
                     })
                 .AddExternalIdentityProviders();
 
-            if (this.settings.Idp?.Google.IsValid() == true)
-            {
-                this.logger.LogInformation("Configuring Google identity provider");
-                authenticationServices.AddOpenIdConnect(
-                    authenticationScheme: "Google",
-                    displayName: "Google",
-                    options =>
-                    {
-                        options.Authority = "https://accounts.google.com/";
-                        options.ClientId = this.settings.Idp.Google.ClientId;
-                        options.CallbackPath = "/signin-google";
-                        options.SignedOutCallbackPath = "/signout-callback-google";
-                        options.RemoteSignOutPath = "/signout-google";
-                        options.Scope.Add("email");
-                    });
-            }
-
             // TODO (Cameron): This is a bit messy. I think ultimately this should be configurable inside the application itself.
             if (this.settings.Mail?.IsValid() == true)
             {
@@ -199,6 +183,27 @@ namespace Ironclad
 
                 app.UseForwardedHeaders(forwardedHeadersOptions);
                 app.UseMiddleware<PathBaseHeaderMiddleware>();
+            }
+
+            if (this.settings.Idp?.Google.IsValid() == true)
+            {
+                this.logger.LogInformation("Configuring Google identity provider");
+
+                using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    var store = serviceScope.ServiceProvider.GetRequiredService<IStore<IdentityProvider>>();
+                    var identityProvider = new IdentityProvider
+                    {
+                        Name = "Google",
+                        DisplayName = "Google",
+                        Authority = "https://accounts.google.com/",
+                        ClientId = this.settings.Idp.Google.ClientId,
+                        CallbackPath = "/signin-google",
+                        Scopes = new[] { "email" },
+                    };
+
+                    store.AddOrUpdateAsync(identityProvider.Name, identityProvider);
+                }
             }
 
             app.UseMiddleware<AuthCookieMiddleware>();
