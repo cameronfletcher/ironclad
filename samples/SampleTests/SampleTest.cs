@@ -28,7 +28,7 @@ namespace SampleTests
                 Password = "password",
             };
 
-            var usersClient = new UsersHttpClient(this.Authority, this.Handler);
+            var usersClient = new UsersHttpClient(this.ApiUri, this.Handler);
             await usersClient.AddUserAsync(user);
 
             // act

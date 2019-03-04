@@ -24,22 +24,22 @@ namespace Ironclad.Client
         /// </summary>
         protected static readonly JsonSerializerSettings JsonSerializerSettings = GetJsonSerializerSettings();
 
-        private readonly string authority;
+        private readonly string apiUri;
 
         private bool disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpClientBase"/> class.
         /// </summary>
-        /// <param name="authority">The authority.</param>
+        /// <param name="apiUri">The API URI.</param>
         /// <param name="innerHandler">The inner handler.</param>
-        public HttpClientBase(string authority, HttpMessageHandler innerHandler = null)
+        public HttpClientBase(string apiUri, HttpMessageHandler innerHandler = null)
         {
             // TODO (Cameron): Make sure we're working with application/json.
             var handler = innerHandler ?? new HttpClientHandler();
 
             this.Client = new HttpClient(handler, innerHandler == null);
-            this.authority = authority;
+            this.apiUri = apiUri;
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Ironclad.Client
         /// <param name="path">The path.</param>
         /// <returns>A URL.</returns>
 #pragma warning disable CA1055
-        protected string RelativeUrl(string path) => this.authority + path;
+        protected string RelativeUrl(string path) => this.apiUri + path;
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
