@@ -18,6 +18,7 @@ namespace Ironclad.Controllers
     using Ironclad.Models;
     using Ironclad.Sdk;
     using Ironclad.Services.Email;
+    using Ironclad.Services.Passwords;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -35,6 +36,7 @@ namespace Ironclad.Controllers
         private readonly ILogger logger;
         private readonly IIdentityServerInteractionService interaction;
         private readonly WebsiteSettings websiteSettings;
+        private readonly IPwnedPasswordsClient pwnedPasswordsClient;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -43,8 +45,10 @@ namespace Ironclad.Controllers
             IEmailSender emailSender,
             ILogger<AccountController> logger,
             IIdentityServerInteractionService interaction,
-            WebsiteSettings websiteSettings)
+            WebsiteSettings websiteSettings,
+            IPwnedPasswordsClient pwnedPasswordsClient)
         {
+            this.pwnedPasswordsClient = pwnedPasswordsClient;
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.store = store;
@@ -255,6 +259,12 @@ namespace Ironclad.Controllers
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl = null)
         {
             this.ViewData["ReturnUrl"] = returnUrl;
+
+            var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
+            if (isPwnd)
+            {
+                this.ModelState.AddModelError(nameof(model.Password), "This Password has previously appeared in a data breach and should never be used.");
+            }
 
             if (this.ModelState.IsValid)
             {
@@ -604,6 +614,12 @@ namespace Ironclad.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CompleteRegistration(CompleteRegistrationModel model)
         {
+            var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
+            if (isPwnd)
+            {
+                this.ModelState.AddModelError(nameof(model.Password), "This Password has previously appeared in a data breach and should never be used.");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
