@@ -1,4 +1,4 @@
-// Copyright (c) Lykke Corp.
+﻿// Copyright (c) Lykke Corp.
 // See the LICENSE file in the project root for more information.
 
 namespace Ironclad.Controllers
@@ -13,6 +13,7 @@ namespace Ironclad.Controllers
     using Ironclad.Models;
     using Ironclad.Sdk;
     using Ironclad.Services.Email;
+    using Ironclad.Services.Passwords;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -30,19 +31,22 @@ namespace Ironclad.Controllers
         private readonly IEmailSender emailSender;
         private readonly ILogger logger;
         private readonly UrlEncoder urlEncoder;
+        private readonly IPwnedPasswordsClient pwnedPasswordsClient;
 
         public ManageController(
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+          UrlEncoder urlEncoder,
+          IPwnedPasswordsClient pwnedPasswordsClient)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.emailSender = emailSender;
             this.logger = logger;
             this.urlEncoder = urlEncoder;
+            this.pwnedPasswordsClient = pwnedPasswordsClient;
         }
 
         [TempData]
@@ -148,7 +152,7 @@ namespace Ironclad.Controllers
 
         [Route("/settings/changepassword")]
         [HttpGet]
-        public async Task<IActionResult> ChangePassword()
+        public async Task<IActionResult> ChangePassword(string returnUrl)
         {
             var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
@@ -162,6 +166,12 @@ namespace Ironclad.Controllers
                 return this.RedirectToAction(nameof(this.SetPassword));
             }
 
+            if (this.TempData["ChangePasswordReason"] != null)
+            {
+                this.StatusMessage = this.TempData["ChangePasswordReason"].ToString();
+                this.TempData["ChangePasswordReason"] = null;
+            }
+
             var model = new ChangePasswordModel { StatusMessage = this.StatusMessage };
             return this.View(model);
         }
@@ -171,6 +181,12 @@ namespace Ironclad.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
         {
+            var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.NewPassword);
+            if (isPwnd)
+            {
+                this.ModelState.AddModelError(nameof(model.NewPassword), "This Password has previously appeared in a data breach and should never be used.");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
@@ -192,6 +208,11 @@ namespace Ironclad.Controllers
             await this.signInManager.SignInAsync(user, isPersistent: false);
             this.logger.LogInformation("this.User changed their password successfully.");
             this.StatusMessage = "Your password has been changed.";
+
+            if (this.Request.Query.Keys.Contains("return_url"))
+            {
+                return this.Redirect(this.Request.Query["return_url"]);
+            }
 
             return this.RedirectToAction(nameof(this.ChangePassword));
         }

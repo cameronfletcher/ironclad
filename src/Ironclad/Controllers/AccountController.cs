@@ -98,9 +98,18 @@ namespace Ironclad.Controllers
 
             // this doesn't count login failures towards account lockout to enable password failures to trigger account lockout, set lockoutOnFailure: true
             var result = await this.signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
+
             if (result.Succeeded)
             {
                 this.logger.LogInformation("User logged in.");
+
+                var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
+                if (isPwnd)
+                {
+                    this.TempData["ChangePasswordReason"] = "This Password has previously appeared in a data breach and should never be used. Please, change it.";
+                    return this.RedirectToAction("ChangePassword", "Manage", new { returnUrl });
+                }
+
                 return this.RedirectToLocal(returnUrl);
             }
             else if (result.RequiresTwoFactor)
