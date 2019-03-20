@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Lykke Corp.
 // See the LICENSE file in the project root for more information.
 
+#pragma warning disable CA5350
+
 namespace Ironclad.Services.Passwords
 {
     using System;
@@ -45,7 +47,9 @@ namespace Ironclad.Services.Passwords
 
             try
             {
+#pragma warning disable CA2234
                 var response = await this.client.GetAsync("range/" + sha1Prefix, cancellationToken);
+#pragma warning restore CA2234
 
                 if (response.IsSuccessStatusCode)
                 {

@@ -2,7 +2,6 @@
 // See the LICENSE file in the project root for more information.
 
 // TODO (Cameron): Refactor and remove when JSON configuration supports snake case.
-
 #pragma warning disable IDE1006, SA1300, SA1202
 #pragma warning disable CA1812, CA1308, CA1034, CA1056, CA1707, CA1724
 

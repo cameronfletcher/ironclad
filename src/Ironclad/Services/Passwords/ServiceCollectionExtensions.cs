@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Lykke Corp.
 // See the LICENSE file in the project root for more information.
 
+#pragma warning disable CA1054
+
 namespace Ironclad.Services.Passwords
 {
     using System;

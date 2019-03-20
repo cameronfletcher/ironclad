@@ -150,9 +150,11 @@ namespace Ironclad.Controllers
             return this.RedirectToAction(nameof(this.Index));
         }
 
+        #pragma warning disable CA1054
         [Route("/settings/changepassword")]
         [HttpGet]
         public async Task<IActionResult> ChangePassword(string returnUrl)
+        #pragma warning restore CA1054
         {
             var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
