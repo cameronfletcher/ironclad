@@ -150,11 +150,9 @@ namespace Ironclad.Controllers
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        #pragma warning disable CA1054
         [Route("/settings/changepassword")]
         [HttpGet]
-        public async Task<IActionResult> ChangePassword(string returnUrl)
-        #pragma warning restore CA1054
+        public async Task<IActionResult> ChangePassword()
         {
             var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
@@ -166,12 +164,6 @@ namespace Ironclad.Controllers
             if (!hasPassword)
             {
                 return this.RedirectToAction(nameof(this.SetPassword));
-            }
-
-            if (this.TempData["ChangePasswordReason"] != null)
-            {
-                this.StatusMessage = this.TempData["ChangePasswordReason"].ToString();
-                this.TempData["ChangePasswordReason"] = null;
             }
 
             var model = new ChangePasswordModel { StatusMessage = this.StatusMessage };
@@ -210,11 +202,6 @@ namespace Ironclad.Controllers
             await this.signInManager.SignInAsync(user, isPersistent: false);
             this.logger.LogInformation("this.User changed their password successfully.");
             this.StatusMessage = "Your password has been changed.";
-
-            if (this.Request.Query.Keys.Contains("return_url"))
-            {
-                return this.Redirect(this.Request.Query["return_url"]);
-            }
 
             return this.RedirectToAction(nameof(this.ChangePassword));
         }

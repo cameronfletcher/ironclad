@@ -24,11 +24,13 @@ namespace Ironclad.Controllers
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json;
 
     [Authorize]
     [SecurityHeaders]
     public class AccountController : Controller
     {
+        private readonly string pwnedPasswordMessage = "This Password has previously appeared in a data breach and should never be used.";
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IStore<IdentityProvider> store;
@@ -83,12 +85,33 @@ namespace Ironclad.Controllers
             return this.View();
         }
 
+        [Route("/signin/newpassword")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult LoginWithNewPassword(string returnUrl = null)
+        {
+            var model = JsonConvert.DeserializeObject<LoginModelExtended>((string)this.TempData["LoginModel"]);
+
+            this.ViewData["ReturnUrl"] = returnUrl;
+
+            this.ModelState.AddModelError(nameof(model.Password), this.pwnedPasswordMessage);
+
+            return this.View(model);
+        }
+
         [Route("/signin")]
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model, string returnUrl = null)
         {
+            var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
+            if (isPwnd)
+            {
+                this.TempData["LoginModel"] = JsonConvert.SerializeObject(model);
+                return this.RedirectToAction("LoginWithNewPassword", new { returnUrl });
+            }
+
             this.ViewData["ReturnUrl"] = returnUrl;
 
             if (!this.ModelState.IsValid)
@@ -103,12 +126,63 @@ namespace Ironclad.Controllers
             {
                 this.logger.LogInformation("User logged in.");
 
-                var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
-                if (isPwnd)
+                return this.RedirectToLocal(returnUrl);
+            }
+            else if (result.RequiresTwoFactor)
+            {
+                return this.RedirectToAction(nameof(this.LoginWith2fa), new { returnUrl, model.RememberMe });
+            }
+            else if (result.IsLockedOut)
+            {
+                this.logger.LogWarning("User account locked out.");
+                return this.RedirectToAction(nameof(this.Lockout));
+            }
+            else
+            {
+                this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return this.View(model);
+            }
+        }
+
+        [Route("/signin/newpassword")]
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoginWithNewPassword(LoginModelExtended model, string returnUrl = null)
+        {
+            var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.NewPassword);
+            if (isPwnd)
+            {
+                this.ModelState.AddModelError(nameof(model.NewPassword), this.pwnedPasswordMessage);
+            }
+
+            this.ViewData["ReturnUrl"] = returnUrl;
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var result = await this.signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                this.logger.LogInformation("User logged in.");
+
+                var user = await this.userManager.FindByNameAsync(model.Username);
+                if (user == null)
                 {
-                    this.TempData["ChangePasswordReason"] = "This Password has previously appeared in a data breach and should never be used. Please, change it.";
-                    return this.RedirectToAction("ChangePassword", "Manage", new { returnUrl });
+                    throw new ApplicationException($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
                 }
+
+                var changePasswordResult = await this.userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
+                if (!changePasswordResult.Succeeded)
+                {
+                    this.AddErrors(changePasswordResult);
+                    return this.View(model);
+                }
+
+                await this.signInManager.SignInAsync(user, isPersistent: false);
+                this.logger.LogInformation("this.User changed their password successfully.");
 
                 return this.RedirectToLocal(returnUrl);
             }
@@ -272,7 +346,7 @@ namespace Ironclad.Controllers
             var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
             if (isPwnd)
             {
-                this.ModelState.AddModelError(nameof(model.Password), "This Password has previously appeared in a data breach and should never be used.");
+                this.ModelState.AddModelError(nameof(model.Password), this.pwnedPasswordMessage);
             }
 
             if (this.ModelState.IsValid)
@@ -626,7 +700,7 @@ namespace Ironclad.Controllers
             var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
             if (isPwnd)
             {
-                this.ModelState.AddModelError(nameof(model.Password), "This Password has previously appeared in a data breach and should never be used.");
+                this.ModelState.AddModelError(nameof(model.Password), this.pwnedPasswordMessage);
             }
 
             if (!this.ModelState.IsValid)
