@@ -30,7 +30,7 @@ namespace Ironclad.Controllers
     [SecurityHeaders]
     public class AccountController : Controller
     {
-        private readonly string pwnedPasswordMessage = "This Password has previously appeared in a data breach and should never be used.";
+        private const string PwnedPasswordMessage = "This Password has previously appeared in a data breach and should never be used.";
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IStore<IdentityProvider> store;
@@ -94,7 +94,7 @@ namespace Ironclad.Controllers
 
             this.ViewData["ReturnUrl"] = returnUrl;
 
-            this.ModelState.AddModelError(nameof(model.Password), this.pwnedPasswordMessage);
+            this.ModelState.AddModelError(nameof(model.Password), PwnedPasswordMessage);
 
             return this.View(model);
         }
@@ -153,7 +153,7 @@ namespace Ironclad.Controllers
             var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.NewPassword);
             if (isPwnd)
             {
-                this.ModelState.AddModelError(nameof(model.NewPassword), this.pwnedPasswordMessage);
+                this.ModelState.AddModelError(nameof(model.NewPassword), PwnedPasswordMessage);
             }
 
             this.ViewData["ReturnUrl"] = returnUrl;
@@ -346,7 +346,7 @@ namespace Ironclad.Controllers
             var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
             if (isPwnd)
             {
-                this.ModelState.AddModelError(nameof(model.Password), this.pwnedPasswordMessage);
+                this.ModelState.AddModelError(nameof(model.Password), PwnedPasswordMessage);
             }
 
             if (this.ModelState.IsValid)
@@ -700,7 +700,7 @@ namespace Ironclad.Controllers
             var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
             if (isPwnd)
             {
-                this.ModelState.AddModelError(nameof(model.Password), this.pwnedPasswordMessage);
+                this.ModelState.AddModelError(nameof(model.Password), PwnedPasswordMessage);
             }
 
             if (!this.ModelState.IsValid)
