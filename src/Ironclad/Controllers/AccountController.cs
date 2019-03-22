@@ -105,13 +105,6 @@ namespace Ironclad.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model, string returnUrl = null)
         {
-            var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
-            if (isPwnd)
-            {
-                this.TempData["LoginModel"] = JsonConvert.SerializeObject(model);
-                return this.RedirectToAction("LoginWithNewPassword", new { returnUrl });
-            }
-
             this.ViewData["ReturnUrl"] = returnUrl;
 
             if (!this.ModelState.IsValid)
@@ -124,6 +117,14 @@ namespace Ironclad.Controllers
 
             if (result.Succeeded)
             {
+                var isPwnd = await this.pwnedPasswordsClient.HasPasswordBeenPwnedAsync(model.Password);
+                if (isPwnd)
+                {
+                    this.TempData["LoginModel"] = JsonConvert.SerializeObject(model);
+                    await this.signInManager.SignOutAsync();
+                    return this.RedirectToAction("LoginWithNewPassword", new { returnUrl });
+                }
+
                 this.logger.LogInformation("User logged in.");
 
                 return this.RedirectToLocal(returnUrl);

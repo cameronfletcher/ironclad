@@ -32,9 +32,14 @@ namespace Ironclad.Services.Passwords
             this.client = client;
         }
 
-        /// <inheritdoc />
         public async Task<bool> HasPasswordBeenPwnedAsync(string password, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrEmpty(password))
+            {
+                this.logger.LogWarning("Password is empty, pwned check is skipped.");
+                return false;
+            }
+
             if (this.client.BaseAddress == null)
             {
                 this.logger.LogWarning("Pwned passwords check is disabled, because URI for API not set up.");
