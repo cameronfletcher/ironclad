@@ -73,6 +73,38 @@ namespace Ironclad.Tests.Unit
             }
         }
 
+        [Fact]
+        public async Task HasPasswordBeenPwned_PasswordIsEmpty_ReturnsFalse()
+        {
+            using (var fakeHttpClient = new HttpClient(new FakeHttpMessageHandler()))
+            {
+                fakeHttpClient.BaseAddress = new Uri("http://localhost");
+                _httpTest.RespondWith($"{Sha1Suffix}:250", 200);
+
+                var service = new PwnedPasswordsClient(_fakeLogger, fakeHttpClient);
+
+                var isPwned = await service.HasPasswordBeenPwnedAsync("");
+
+                isPwned.Should().BeFalse();
+            }
+        }
+
+        [Fact]
+        public async Task HasPasswordBeenPwned_PasswordIsNull_ReturnsFalse()
+        {
+            using (var fakeHttpClient = new HttpClient(new FakeHttpMessageHandler()))
+            {
+                fakeHttpClient.BaseAddress = new Uri("http://localhost");
+                _httpTest.RespondWith($"{Sha1Suffix}:250", 200);
+
+                var service = new PwnedPasswordsClient(_fakeLogger, fakeHttpClient);
+
+                var isPwned = await service.HasPasswordBeenPwnedAsync(null);
+
+                isPwned.Should().BeFalse();
+            }
+        }
+
         public void Dispose()
         {
             _httpTest.Dispose();
